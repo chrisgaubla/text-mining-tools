@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  *
  * @author chrisgaubla
  */
-public class ICDListBuilder {
+public class ICD9ListBuilder {
 
     private final String SLASH = "(.+ )?(\\S+)/([^-\\s]+)([-\\s].+)?";
     private final String BRACKET = "(.+ )\\[(.+?)\\](.+)?$";
@@ -30,7 +30,7 @@ public class ICDListBuilder {
     private Matcher slashMatcher;
     private Matcher bracketMatcher;
 
-    public ICDListBuilder() {
+    public ICD9ListBuilder() {
         SLASH_PATTERN = Pattern.compile(SLASH, Pattern.CASE_INSENSITIVE);
         BRACKET_PATTERN = Pattern.compile(BRACKET, Pattern.CASE_INSENSITIVE);
     }
@@ -46,7 +46,7 @@ public class ICDListBuilder {
         try {
 
             PrintWriter out;
-            out = new PrintWriter("data/outputICDWikiUnspecified.txt");
+            out = new PrintWriter("data/outputicd9_1.txt");
 
             HTTPGetter getter = new HTTPGetter(1300);
 
@@ -61,9 +61,9 @@ public class ICDListBuilder {
 
             while ((line = reader.readLine()) != null) {
                 wikiContent = "";
-                code = line.substring(6, 14);
+                code = line.substring(0, 6);
 
-                description = line.substring(77, line.length());
+                description = line.substring(6, line.length());
                 descriptionModified = description;
                 descriptionModified = descriptionModified.replaceAll("Unspecified | unspecified|Other specified |Other |,|, other site|of other sites ", "");
                 descriptionModified = descriptionModified.replaceAll("infections", "infection");
@@ -98,15 +98,33 @@ public class ICDListBuilder {
                 } else if (bracketMatcher.find()) {
                     System.out.println("BRACKETS ! ");
                     String bracketContent = bracketMatcher.group(2);
+
                     if (bracketMatcher.group(3) != null) {
                         descriptionModified = bracketMatcher.group(1) + bracketMatcher.group(3);
-                    }
-                    else {
+                    } else {
                         descriptionModified = bracketMatcher.group(1);
                     }
                     System.out.println("without bracket : " + descriptionModified + "\n bracketContent : " + bracketContent);
                     wikiContent = getter.sendGet(descriptionModified);
-                    out.print(code + "\t" + description + "\t" + descriptionModified + "\t" + wikiContent + "\t" + bracketContent + "\n");
+                    if (!bracketContent.equals("more than 24 hours")
+                            && !bracketContent.equals("inoculation of animals")
+                            && !bracketContent.equals("juvenile type")
+                            && !bracketContent.equals("weight")
+                            && !bracketContent.equals("less than one hour")
+                            && !bracketContent.equals("1-24 hours")
+                            && !bracketContent.equals("except thigh")
+                            && !bracketContent.equals("any part")
+                            && !bracketContent.equals("second degree")
+                            && !bracketContent.equals("third degree, not otherwise specified")
+                            && !bracketContent.equals("deep third degree")
+                            && !bracketContent.equals("first degree")
+                            && !bracketContent.equals("third degree NOS")
+                            && !bracketContent.equals("any degree")) {
+                        out.print(code + "\t" + description + "\t" + descriptionModified + "\t" + wikiContent + "\t" + bracketContent + "\n");
+                    } else {
+                        out.print(code + "\t" + description + "\t" + descriptionModified + "\t" + wikiContent + "\t" + "null" + "\n");
+
+                    }
 
                 } else {
                     System.out.println("NO SLASHES AND NO BRACKETS!");
@@ -120,9 +138,9 @@ public class ICDListBuilder {
             out.close();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(ICDListBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ICD9ListBuilder.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(ICDListBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ICD9ListBuilder.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
