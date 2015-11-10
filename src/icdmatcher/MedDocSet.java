@@ -7,6 +7,7 @@ package icdmatcher;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -58,6 +59,7 @@ public class MedDocSet {
 
                         result += node.getTextContent();
                     }
+                    
 
                 }
                 historySet.put(id,result.replaceAll(specialChar, ""));
@@ -69,6 +71,48 @@ public class MedDocSet {
         }
         System.out.println("Medical document set loaded !");
         return historySet;
+    }
+     public HashMap<Integer, ArrayList<String>> getICDSet() {
+        File japMedRec = new File(path);
+        String dataNode = "data";
+        HashMap<Integer,ArrayList<String>> icdSet = new HashMap<>();
+
+        DocumentBuilderFactory docfactory = DocumentBuilderFactory.newInstance();
+        docfactory.setNamespaceAware(true);
+        DocumentBuilder docbuilder;
+        Document document;
+
+        try {
+
+            docbuilder = docfactory.newDocumentBuilder();
+
+            document = docbuilder.parse(japMedRec);
+            NodeList recList = document.getElementsByTagName(dataNode);
+            System.out.println("Loading medical document set...");
+            for (int i = 0; i < recList.getLength(); i++) {
+                NodeList childNodes = recList.item(i).getChildNodes();
+                int id = Integer.parseInt(recList.item(i).getAttributes().getNamedItem("id").getNodeValue());
+                ArrayList<String> result = new ArrayList<>();
+                
+                for (int j = 0; j < childNodes.getLength(); j++) {
+                    Node node = childNodes.item(j);
+
+                    if (node.getNodeName().equals("icd")) {
+                        String code = node.getAttributes().getNamedItem("code").getNodeValue();
+                        result.add(code);
+                    }
+                    
+
+                }
+                icdSet.put(id,result);
+            }
+
+        } catch (ParserConfigurationException | SAXException | IOException e1) {
+            System.out.println("exception! ");
+            e1.printStackTrace();
+        }
+        System.out.println("Medical document set loaded ! ICD");
+        return icdSet;
     }
 
 }

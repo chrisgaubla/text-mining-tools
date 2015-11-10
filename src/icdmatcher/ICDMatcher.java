@@ -30,23 +30,39 @@ public class ICDMatcher {
 
             MedDocSet historyBuilder = new MedDocSet("data/japanese_med_rec.xml");
             HashMap<Integer, String> history = historyBuilder.getHistorySet();
-
+            HashMap<Integer, ArrayList<String>> icdSet = historyBuilder.getICDSet();
+            
             Dictionary dicoBuilder = new Dictionary("data/DictionaryFINAL2.csv");
             HashMap<String, ArrayList<Pattern>> dico = dicoBuilder.getDictionary();
 
             HashMap<Integer, ArrayList<String>> matching = getMatching(dico, history);
+            
+            int truePos = 0;
+            int falsePos = 0;
+            int falsNeg = 0;
 
             for (Integer id : matching.keySet()) {
                 result.print(id + " : \n");
                 for (String code : matching.get(id)){
-                    result.print(code + "\n");
+                    result.print(code);
+                    for(String codeTrue : icdSet.get(id)){
+                        if(code.equals(codeTrue)){
+                            result.print(" correct");
+                            break;
+                        }
+                    }
+                    result.print("\n");
                 }
                 System.out.println("\n");
             }
             result.close();
+            
+            
+            
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ICDMatcher.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
 
     }
 

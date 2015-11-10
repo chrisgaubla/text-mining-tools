@@ -5,6 +5,7 @@
  */
 package icdcounter;
 
+import com.sun.xml.internal.ws.util.StringUtils;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -63,14 +64,39 @@ public class LineMatcher {
                             if (!dicICD[6].equals("null")) {
                                 j++;
                                 out.println(dicICD[0]);
+                                break;
                             }
-                            break;
                         }
                     }
 
                 }
+                int numHeadingTerms = 0;
+                int headTermsSyn = 0;
+                int headTermWiki = 0;
+                int overallSyn = 0;
+                for (String[] dicICD : dicList) {
+                    if (dicICD[0].trim().length() == 3) {
+                        if (!dicICD[8].equals("null")) {
+                            headTermWiki++;
+                        }
+                        headTermsSyn++;
+                        if (!dicICD[6].equals("null")) {
+                            overallSyn++;
+                            if (dicICD[1].contains("[")) {
+                                if (dicICD[6].length() - dicICD[6].replace(";", "").length() > 1) {
+                                    numHeadingTerms++;
+                                }
+
+                            } else {
+                                numHeadingTerms++;
+                            }
+                        }
+                    }
+                }
                 System.out.println("With " + precision + " characters precision. \n Over " + toTest.size() + " ICD codes to test, "
                         + i + " of them were in the dictionary \n and " + j + " got synonyms.");
+                System.out.println("Over " + headTermsSyn + " three letter codes, " + numHeadingTerms + " got synonyms without counting brackets. and "
+                        + headTermWiki + " got wikicontent and overall syn is " + overallSyn);
 
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(LineMatcher.class.getName()).log(Level.SEVERE, null, ex);
