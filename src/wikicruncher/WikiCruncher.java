@@ -15,9 +15,9 @@ public class WikiCruncher {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ICDListBuilder builder = new ICDListBuilder();        
+        ICD9ListBuilder builder = new ICD9ListBuilder();        
         
-        builder.getICDListFromPath("data/UnspecifiedLines.txt");
+        builder.getICDListFromPath("data/icd9.txt");
 //        BodyPartsMapper body = new BodyPartsMapper("mesh/BodyRegions.txt");
 //        body.bodyMap("data/icd10cm_order_2015.txt");
         
