@@ -1,6 +1,9 @@
 package wordtools;
 
-import java.util.TreeMap;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main {
 	/**
@@ -11,15 +14,21 @@ public class Main {
 	 */
 	public static void main(String[] args) {
             
-            BracketCounter brac = new BracketCounter();
-            brac.countBracketSyn("data/DictionaryFINAL2.csv");
-            
+            PrintWriter out = null;
+            try {
+                out = new PrintWriter("data/outputWordcount");
+                ICDWordCount count = new ICDWordCount();
+                count.count("data/DictionaryFINAL2.csv",out );
+                
+//            BracketCounter brac = new BracketCounter();
+//            brac.countBracketSyn("data/DictionaryFINAL2.csv");
+//
 		
 //		if(args.length!=2){
 //			System.out.println("bad number of argument");
 //		}
 //		else{
-//			
+//
 //		
 //		String inputPath = args[0];
 //		String wordsPath = args[1];
@@ -50,6 +59,11 @@ public class Main {
 //			e.printStackTrace();
 //		}
 //		}
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                out.close();
+            }
 
 	}
 
