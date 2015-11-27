@@ -15,6 +15,8 @@ import java.util.TreeSet;
  */
 public class CommonWordFilter {
 
+    final String specialChar = ",|;|\\.|:|(|)|\\[|\\]";
+
     private final TreeSet<String> commonWords;
 
     public CommonWordFilter() {
@@ -35,4 +37,18 @@ public class CommonWordFilter {
         }
         return outputList;
     }
+
+    public String getFilteredString(String input) {
+        input = input.replaceAll(specialChar, "");
+        String[] inputArray = input.split(" ");
+        String output = "";
+
+        for (String word : inputArray) {
+            if (!commonWords.contains(word)) {
+                output = output.concat(word + " ");
+            }
+        }
+        return output;
+    }
+
 }

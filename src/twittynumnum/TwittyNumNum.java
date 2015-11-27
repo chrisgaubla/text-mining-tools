@@ -32,7 +32,7 @@ public class TwittyNumNum {
             out = new PrintWriter("data/#DebatRegionales.txt");
             TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
             FutureListener future = new FutureListener(twitterStream, out);
-            String[] keywords = {"#DebatRegionales"};
+            String[] keywords = {"#Paris"};
             future.listen(keywords);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(TwittyNumNum.class.getName()).log(Level.SEVERE, null, ex);

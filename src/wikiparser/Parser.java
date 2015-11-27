@@ -44,7 +44,7 @@ public class Parser {
         
          if (data.length!=0&&data.length==6){
               if(!data[5].equalsIgnoreCase("null")){
-                     synonyms.add(data[5]);
+                     //synonyms.add(data[5]);
                  }
              String red_flag = data[3];     
              String wiki_txt = data[4].trim();

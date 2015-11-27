@@ -35,7 +35,7 @@ public class ICDWordCount {
             
             while((line = reader.readLine())!=null){
                 String[] lineSplitted = line.split("\\t");
-                String[] descriptionSplitted = lineSplitted[1].replaceAll(",", "").split(" ");
+                String[] descriptionSplitted = lineSplitted[6].replaceAll(",", "").split(";");
                 for(String word : descriptionSplitted){
                     if(wordCountMap.get(word)!=null){
                         wordCountMap.put(word, wordCountMap.get(word)+1);

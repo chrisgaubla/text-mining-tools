@@ -32,7 +32,7 @@ public class TxtFileReader {
         Outliner out ;
                 
         String outputfile_name = fout + dateFormat.format(date);
-        String header= "ICD_code||ICD_concept||ICD_modified||MeSH_code||OMIM_code||DiseasesDB_code||Disease_Syn||Specialty\n";
+        String header= "ICD_code\tICD_concept\tICD_modified\tMeSH_code\tOMIM_code\tDiseasesDB_code\tDisease_Syn\tSpecialty\n";
         File file = new File(path);
         System.out.println("Filr: "+file.getName());
         writeFile(header, outputfile_name);
@@ -51,10 +51,10 @@ public class TxtFileReader {
                     finalSyn = stringBuilder.toString();
                     
                 }
-                System.out.println(out.getIcd_code()+"||"+out.getIcd_concept()+"||"+out.getModified_desc()+"||"
-                        +out.getMesh_code()+"||"+out.getOmim_code()+"||"+out.getDiseasesDB_code()+"||"+finalSyn+"||"+out.getSpecialty()+"||"+out.getRed_flag()+"\n");
-                writeFile(out.getIcd_code()+"||"+out.getIcd_concept()+"||"+out.getModified_desc()+"||"
-                        +out.getMesh_code()+"||"+out.getOmim_code()+"||"+out.getDiseasesDB_code()+"||"+finalSyn+"||"+out.getSpecialty()+"||"+out.getRed_flag()+"\n", outputfile_name);
+                System.out.println(out.getIcd_code()+"\t"+out.getIcd_concept()+"\t"+out.getModified_desc()+"\t"
+                        +out.getMesh_code()+"\t"+out.getOmim_code()+"\t"+out.getDiseasesDB_code()+"\t"+finalSyn+"\t"+out.getSpecialty()+"\t"+out.getRed_flag()+"\n");
+                writeFile(out.getIcd_code()+"\t"+out.getIcd_concept()+"\t"+out.getModified_desc()+"\t"
+                        +out.getMesh_code()+"\t"+out.getOmim_code()+"\t"+out.getDiseasesDB_code()+"\t"+finalSyn+"\t"+out.getSpecialty()+"\t"+out.getRed_flag()+"\n", outputfile_name);
             
 
             

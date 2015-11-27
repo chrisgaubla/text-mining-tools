@@ -16,7 +16,7 @@ public class Main {
             
             PrintWriter out = null;
             try {
-                out = new PrintWriter("data/outputWordcount");
+                out = new PrintWriter("data/outputWordcountSynonyms2");
                 ICDWordCount count = new ICDWordCount();
                 count.count("data/DictionaryFINAL2.csv",out );
                 

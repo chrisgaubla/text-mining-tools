@@ -20,7 +20,7 @@ public class BasicICDMiner {
         HashMap<Integer, ArrayList<String>> matching = new HashMap<>();
         
         
-        for (Integer key : history.keySet()) {
+        for (Integer key : history.keySet()) {          
             String input = history.get(key);
             ArrayList<String> icdList = new ArrayList<>();
             for (String icd : dico.keySet()) {

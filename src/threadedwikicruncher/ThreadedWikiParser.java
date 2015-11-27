@@ -32,7 +32,7 @@ public class ThreadedWikiParser extends Thread {
      * @param path
      */
     public void parseAndQueryWiki(String path, String lang) {
-
+        
         try {
 
             PrintWriter out = null;
@@ -42,7 +42,7 @@ public class ThreadedWikiParser extends Thread {
                     out = new PrintWriter("data/outputICDWikiThreadedFR.txt");
                     break;
                 case "en":
-                    out = new PrintWriter("data/outputICDWikiThreadedEN.txt");
+                    out = new PrintWriter("data/outputICDWikiThreadedEN2.txt");
                     break;
             }
 
@@ -53,7 +53,7 @@ public class ThreadedWikiParser extends Thread {
 
             ArrayList<ArrayList<String>> outputList = new ArrayList<>();
 
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 8; i++) {
                 if (lang.equals("en")) {
                     threadList.add(new Thread(new RunnableParserEng(new HTTPGetter(1300), reader, out)));
                 } else if (lang.equals("fr")) {
