@@ -1,0 +1,40 @@
+<meta charset="UTF-8">
+
+<html>
+<body>
+<div>
+        <form action="service.php" method="post">
+                Text to assign: <input type="text" name="history"><br>
+
+                <input type="submit">
+        </form>
+</div>
+
+<div>
+<?php
+        if (isset($_POST["history"])){
+
+                $url = 'http://129.194.201.189:8686/findICD';
+                $data = $_POST["history"];
+
+
+        // use key 'http' even if you send the request to https://...
+                $options = array(
+                        'http' => array(
+                                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                                'method'  => 'POST',
+                                'content' => $data,
+                                ),
+                        );
+                $context  = stream_context_create($options);
+                $result = file_get_contents($url, false, $context);
+
+
+                var_dump($result);
+        };
+?>
+</div>
+
+</body>
+</html>
+
