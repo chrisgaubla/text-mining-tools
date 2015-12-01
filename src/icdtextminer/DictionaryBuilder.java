@@ -110,7 +110,7 @@ public class DictionaryBuilder {
     private DicoEntry parseICDLineToDicoEntry(String line) {
         DicoEntry entry;
         ArrayList<Pattern> tokenizedDescription;
-        Pattern descriptionPattern;
+        Pattern descriptionModifiedPattern;
 
         String code = line.substring(0, 9).trim();
         String[] lineArray = line.split("\t");
@@ -118,7 +118,7 @@ public class DictionaryBuilder {
         String description = lineArray[1].replaceAll(specialChar, "");
         String descriptionModified = lineArray[2].replaceAll(specialChar, "");
         tokenizedDescription = buildTokenizedDescription(descriptionModified);
-        descriptionPattern = Pattern.compile(toRegex(descriptionModified), Pattern.CASE_INSENSITIVE);
+        descriptionModifiedPattern = Pattern.compile(toRegex(descriptionModified), Pattern.CASE_INSENSITIVE);
         
         ArrayList<Pattern> synonyms = new ArrayList<>();
         if (!lineArray[6].equals("null")) {
@@ -128,7 +128,7 @@ public class DictionaryBuilder {
                 synonyms.add(Pattern.compile(toRegex(synonym.replaceAll(specialChar, "")), Pattern.CASE_INSENSITIVE));
             }
         }
-        entry = new DicoEntry(code, description, descriptionModified, tokenizedDescription, synonyms, descriptionPattern);
+        entry = new DicoEntry(code, description, descriptionModified, tokenizedDescription, synonyms, descriptionModifiedPattern);
         return entry;
 
     }

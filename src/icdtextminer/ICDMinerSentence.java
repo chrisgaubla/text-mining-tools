@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  *
  * @author chrisgaubla
  */
-public class StringICDMiner {
+public class ICDMinerSentence extends ICDMiner{
 
     private DictionaryBuilder dicoBuilder = new DictionaryBuilder("Dictionary");
 
@@ -29,8 +29,8 @@ public class StringICDMiner {
     SentenceSplitter splitter = new SentenceSplitter();
     private final int WINDOW = 3;
 
+    @Override
     public ArrayList<String> getMatching(String history) {
-        HashMap<Integer, ArrayList<String>> matching = new HashMap<>();
 
         ArrayList<String> icdList = new ArrayList<>();
         ArrayList<String> listSentence = splitter.getChunk(history);
@@ -117,7 +117,7 @@ public class StringICDMiner {
                 }
             }
             if (found) {
-                icdList.add(entry.getCode());
+                icdList.add(entry.getCode()+ " : "+entry.getDescription()+ "\n");
                 System.out.println("Found icd : " + entry.getCode() + " in history");
             }
         }

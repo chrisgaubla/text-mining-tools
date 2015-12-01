@@ -1,6 +1,5 @@
 package web;
 
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -9,7 +8,8 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import icdtextminer.StringICDMiner;
+import icdtextminer.ICDMinerBasic;
+import icdtextminer.ICDMinerSentence;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -29,7 +29,8 @@ public class WebServiceICD {
 
 class MyHandler implements HttpHandler {
 
-    static StringICDMiner miner = new StringICDMiner();
+    static ICDMinerSentence senMiner = new ICDMinerSentence();
+    static ICDMinerBasic basMiner = new ICDMinerBasic();
 
     public void handle(HttpExchange exchange) throws IOException {
         String requestMethod = exchange.getRequestMethod();
@@ -44,25 +45,40 @@ class MyHandler implements HttpHandler {
             Headers requestHeaders = exchange.getRequestHeaders();
             System.out.println("Got post request");
             System.out.println(exchange.getRequestURI());
+
+            InputStream stream = exchange.getRequestBody();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+            String history = "";
+            String line = "";
+            String response = "";
+            while ((line = reader.readLine()) != null) {
+                history = history + line;
+            }
             switch (exchange.getRequestURI().toString()) {
-                case "/findICD":
-                    InputStream stream = exchange.getRequestBody();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-                    String history = "";
-                    String line = "";
-                    while ((line = reader.readLine()) != null) {
-                        history = history + line;
-                    }
+                case "/findICDSentence":
                     System.out.println(history);
 
-                    ArrayList<String> list = miner.getMatching(history);
-                    System.out.println("Response : " + list.toString());
+                    ArrayList<String> senList = senMiner.getMatching(history);
+                    System.out.println("Response : " + senList.toString());
+                    for (String s : senList){
+                        response = response + s;
+                    }
+                    break;
+                case "/findICDBasic":
 
-                    responseBody.write(list.toString().getBytes());
-                    responseBody.close();
+                    System.out.println(history);
+
+                    ArrayList<String> basList = basMiner.getMatching(history);
+                    System.out.println("Response : " + basList.toString());
+                    for (String s : basList){
+                        response = response + s;
+                    }
                     break;
 
             }
+            responseBody.write(response.getBytes());
+            responseBody.close();
+            
 
         }
 

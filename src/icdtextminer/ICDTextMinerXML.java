@@ -17,37 +17,33 @@ import java.util.logging.Logger;
  *
  * @author chrisgaubla
  */
-public class ICDTextMiner {
+public class ICDTextMinerXML {
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public void main(String[] args) {
         PrintWriter result;
         try {
             result = new PrintWriter("data/outputMatchingSenSyn.txt");
 
-            BasicICDMiner basic = new BasicICDMiner();
-            SentenceICDMiner sentence = new SentenceICDMiner();
+            ICDMinerBasic basMiner = new ICDMinerBasic();
+            ICDMinerSentence senMiner = new ICDMinerSentence();
 
             MedDocSet historyBuilder = new MedDocSet("data/japanese_med_rec.xml");
             HashMap<Integer, String> history = historyBuilder.getHistorySet();
             HashMap<Integer, ArrayList<String>> correctMatching = historyBuilder.getICDSet();
 
-            DictionaryBuilder dicoBuilder = new DictionaryBuilder("data/Dictionary18_11_15.csv");
-            //HashMap<String, ArrayList<Pattern>> dicoPattern = dicoBuilder.getDictionaryPattern();
-            HashSet<DicoEntry> dicoString = dicoBuilder.getDictionaryString();
-
-            //HashMap<Integer, ArrayList<String>> testMatchingPat = basic.getMatching(dicoPattern, history);
-            HashMap<Integer, ArrayList<String>> testMatchingSen = sentence.getMatching(dicoString, history);
+            HashMap<Integer, ArrayList<String>> senMatching = getXMLMatching(senMiner, history);
+            HashMap<Integer, ArrayList<String>> basMatching = getXMLMatching(basMiner, history);
 
             ICDMatchingEvaluator eval = new ICDMatchingEvaluator();
 
-            eval.evaluate(testMatchingSen, correctMatching);
+            eval.evaluate(senMatching, correctMatching);
 
-            for (Integer id : testMatchingSen.keySet()) {
+            for (Integer id : senMatching.keySet()) {
                 result.print(id + " : \n");
-                for (String code : testMatchingSen.get(id)) {
+                for (String code : senMatching.get(id)) {
                     result.print(code);
                     for (String codeTrue : correctMatching.get(id)) {
                         if (code.equals(codeTrue)) {
@@ -62,8 +58,18 @@ public class ICDTextMiner {
             result.close();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(ICDTextMiner.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ICDTextMinerXML.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+    }
+
+    public HashMap<Integer, ArrayList<String>> getXMLMatching(ICDMiner miner, HashMap<Integer, String> history) {
+        HashMap<Integer, ArrayList<String>> matching = new HashMap<>();
+
+        for (Integer key : history.keySet()) {
+            matching.put(key, miner.getMatching(history.get(key)));
+        }
+        return matching;
 
     }
 

@@ -6,7 +6,7 @@
 package icdtextminer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,33 +14,33 @@ import java.util.regex.Pattern;
  *
  * @author chrisgaubla
  */
-public class BasicICDMiner {
-    
-    public HashMap<Integer, ArrayList<String>> getMatching(HashMap<String, ArrayList<Pattern>> dico, HashMap<Integer, String> history) {
-        HashMap<Integer, ArrayList<String>> matching = new HashMap<>();
-        
-        
-        for (Integer key : history.keySet()) {          
-            String input = history.get(key);
-            ArrayList<String> icdList = new ArrayList<>();
-            for (String icd : dico.keySet()) {
-                ArrayList<Pattern> terms = dico.get(icd);
+public class ICDMinerBasic extends ICDMiner {
 
-                
-                    for (int i = 1; i < terms.size(); i++) {
-                        Matcher matcher = terms.get(i).matcher(input);
-                        if (matcher.find()) {
-                            icdList.add(icd);
-                            break;
-                        }
-                    }
-                
+    private DictionaryBuilder dicoBuilder = new DictionaryBuilder("Dictionary");
+    private HashSet<DicoEntry> dico = dicoBuilder.getDictionaryString();
 
+    @Override
+    public ArrayList<String> getMatching(String history) {
+        ArrayList<String> icdList = new ArrayList<>();
+        for (DicoEntry entry : dico) {
+            boolean found = false;
+
+            ArrayList<Matcher> matcherList = new ArrayList<>();
+
+            matcherList.add(entry.getDescriptionPattern().matcher(history));
+            for (Pattern pat : entry.getSynonyms()) {
+                matcherList.add(pat.matcher(history));
             }
-            System.out.println("done history # " + key);
-            matching.put(key, icdList);
+
+            for (Matcher matcher : matcherList) {
+                if (matcher.find()) {
+                    found = true;
+                }
+            }
+            if (found) {
+                icdList.add(entry.getCode() + " : " + entry.getDescription()+"\n");
+            }
         }
-        return matching;
+        return icdList;
     }
 }
-

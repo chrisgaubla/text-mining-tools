@@ -14,12 +14,12 @@ import java.util.regex.Pattern;
  */
 public class DicoEntry {
 
-    private String code;
-    private String description;
-    private String descriptionModified;
-    private ArrayList<Pattern> tokenizedDescription;
-    private ArrayList<Pattern> synonyms;
-    private Pattern descriptionPattern;
+    private final String code;
+    private final String description;
+    private final String descriptionModified;
+    private final ArrayList<Pattern> tokenizedDescription;
+    private final ArrayList<Pattern> synonyms;
+    private final Pattern descriptionModifiedPattern;
 
     public DicoEntry(String code, String description, String descriptionModified, ArrayList<Pattern> tokenizedDescription, ArrayList<Pattern> synonyms, Pattern descriptionPattern) {
         this.code = code;
@@ -27,7 +27,7 @@ public class DicoEntry {
         this.descriptionModified = descriptionModified;
         this.tokenizedDescription = tokenizedDescription;
         this.synonyms = synonyms;
-        this.descriptionPattern = descriptionPattern;
+        this.descriptionModifiedPattern = descriptionPattern;
 
     }
 
@@ -52,7 +52,7 @@ public class DicoEntry {
     }
 
     public Pattern getDescriptionPattern() {
-        return descriptionPattern;
+        return descriptionModifiedPattern;
     }
 
 }
