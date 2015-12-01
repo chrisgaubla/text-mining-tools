@@ -118,18 +118,17 @@ public class DictionaryBuilder {
         String description = lineArray[1].replaceAll(specialChar, "");
         String descriptionModified = lineArray[2].replaceAll(specialChar, "");
         tokenizedDescription = buildTokenizedDescription(descriptionModified);
-        descriptionPattern = Pattern.compile(toRegex(descriptionModified));
+        descriptionPattern = Pattern.compile(toRegex(descriptionModified), Pattern.CASE_INSENSITIVE);
         
         ArrayList<Pattern> synonyms = new ArrayList<>();
         if (!lineArray[6].equals("null")) {
             String[] synArray = lineArray[6].split(";");
 
             for (String synonym : synArray) {
-                synonyms.add(Pattern.compile(toRegex(synonym.replaceAll(specialChar, ""))));
+                synonyms.add(Pattern.compile(toRegex(synonym.replaceAll(specialChar, "")), Pattern.CASE_INSENSITIVE));
             }
         }
         entry = new DicoEntry(code, description, descriptionModified, tokenizedDescription, synonyms, descriptionPattern);
-        System.out.println(entry.getCode());
         return entry;
 
     }
@@ -139,8 +138,8 @@ public class DictionaryBuilder {
 
         String[] lineArray = line.split("\t");
 
-        patternList.add(Pattern.compile(toRegex(lineArray[1])));
-        patternList.add(Pattern.compile(toRegex(lineArray[2])));
+        patternList.add(Pattern.compile(toRegex(lineArray[1]), Pattern.CASE_INSENSITIVE));
+        patternList.add(Pattern.compile(toRegex(lineArray[2]), Pattern.CASE_INSENSITIVE));
 
         if (!lineArray[6].equals("null")) {
 
@@ -164,7 +163,7 @@ public class DictionaryBuilder {
         ArrayList<Pattern> listPattern = new ArrayList<>();
         ArrayList<String> listWord = FILTER.getFilteredStringList(descriptionModified);
         for(String s :  listWord){
-            listPattern.add(Pattern.compile(toRegex(s)));
+            listPattern.add(Pattern.compile(toRegex(s), Pattern.CASE_INSENSITIVE));
         }
         return listPattern;
                 

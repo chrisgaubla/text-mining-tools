@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  */
 public class StringICDMiner {
 
-    private DictionaryBuilder dicoBuilder = new DictionaryBuilder("data/Dictionary");
+    private DictionaryBuilder dicoBuilder = new DictionaryBuilder("Dictionary");
 
     private HashSet<DicoEntry> dico = dicoBuilder.getDictionaryString();
     private final TokenizerFactory TOKENIZER_FACTORY = IndoEuropeanTokenizerFactory.INSTANCE;
