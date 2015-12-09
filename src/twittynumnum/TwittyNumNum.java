@@ -18,10 +18,10 @@ public class TwittyNumNum {
     public static void main(String[] args) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey("MEMP20jHw4KTl2glEdHJKjGaN")
-                .setOAuthConsumerSecret("UES2vGvPNhTpd3qM5RUAmHkNV2PU5auwZrkASK7lWOZwvjfuvN")
-                .setOAuthAccessToken("255657390-AuprGz2AHL6JwrYVWjxv9Uuhe1yPRkI80tgfLye5")
-                .setOAuthAccessTokenSecret("8G8lRpxQd1rQTupd7xY0FFKe8EN59WhOXtlpI2IONBLMP");
+                .setOAuthConsumerKey("6id0aTmQrXrfnijhEsC5wfzTO")
+                .setOAuthConsumerSecret("E8A8nvssRUvQ0B9Td32L8hW4wyMyZwPQeAPsvj1EF1WK4HUTou")
+                .setOAuthAccessToken("4350904703-rrfWDlkfRi5l2iwKj1EMpbzxmXu44aqfPL9LOlX")
+                .setOAuthAccessTokenSecret("dS3dT6JNDD1ih6EHXCnBrBm7vDrMWFjcDCupyyiL6RkEu");
 
         //TwitterFactory tf = new TwitterFactory(cb.build());
         //Twitter twitter = tf.getInstance();

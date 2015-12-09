@@ -37,7 +37,7 @@ public class ICDTextMinerXML {
             HashMap<Integer, ArrayList<String>> senMatching = getXMLMatching(senMiner, history);
             HashMap<Integer, ArrayList<String>> basMatching = getXMLMatching(basMiner, history);
 
-            ICDMatchingEvaluator eval = new ICDMatchingEvaluator();
+            ICDTextMinerXmlEvaluator eval = new ICDTextMinerXmlEvaluator();
 
             eval.evaluate(senMatching, correctMatching);
 

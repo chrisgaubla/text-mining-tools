@@ -12,9 +12,9 @@ import java.util.HashMap;
  *
  * @author chrisgaubla
  */
-public class ICDMatchingEvaluator {
+public class ICDTextMinerXmlEvaluator {
 
-    public ICDMatchingEvaluator() {
+    public ICDTextMinerXmlEvaluator() {
 
     }
 

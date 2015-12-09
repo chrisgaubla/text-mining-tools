@@ -83,8 +83,9 @@ public class HTTPGetter {
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
             con.setRequestMethod("GET");
+            
             con.setRequestProperty("User-Agent", USER_AGENT);
-            in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            in = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
             String inputLine;
             StringBuilder rawContent = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {

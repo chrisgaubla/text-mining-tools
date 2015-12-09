@@ -18,7 +18,7 @@ public class ThreadedWikiCruncher {
     public static void main(String[] args) {
         ThreadedWikiParser builder = new ThreadedWikiParser();        
         
-        builder.parseAndQueryWiki("data/missedLines", "en");
+        builder.parseAndQueryWiki("data/CIM10-utf8", "fr");
         
 //        BodyPartsMapper body = new BodyPartsMapper("mesh/BodyRegions.txt");
 //        body.bodyMap("data/icd10cm_order_2015.txt");

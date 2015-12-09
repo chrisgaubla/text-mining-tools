@@ -35,7 +35,10 @@ public class DictionaryBuilder {
     public DictionaryBuilder(String path) {
         this.path = path;
     }
-
+    public Dictionary getDictionaryObject(){
+        return new Dictionary(getDictionaryString());
+        
+    }
     public HashMap<String, ArrayList<Pattern>> getDictionaryPattern() {
         HashMap<String, ArrayList<Pattern>> ICDSet = new HashMap<>();
 
@@ -112,7 +115,7 @@ public class DictionaryBuilder {
         ArrayList<Pattern> tokenizedDescription;
         Pattern descriptionModifiedPattern;
 
-        String code = line.substring(0, 9).trim();
+        String code = line.substring(0, 9).trim().toLowerCase();
         String[] lineArray = line.split("\t");
 
         String description = lineArray[1].replaceAll(specialChar, "");

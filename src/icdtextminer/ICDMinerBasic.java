@@ -6,6 +6,7 @@
 package icdtextminer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,9 +39,12 @@ public class ICDMinerBasic extends ICDMiner {
                 }
             }
             if (found) {
-                icdList.add(entry.getCode() + " : " + entry.getDescription()+"\n");
+                icdList.add(entry.getCode() + " : " + entry.getDescription()+"<br/>");
+                
             }
+            
         }
+        Collections.sort(icdList, String.CASE_INSENSITIVE_ORDER);
         return icdList;
     }
 }

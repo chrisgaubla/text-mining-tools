@@ -10,6 +10,7 @@ import com.aliasi.sentences.SentenceModel;
 import com.aliasi.tokenizer.IndoEuropeanTokenizerFactory;
 import com.aliasi.tokenizer.TokenizerFactory;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.regex.Matcher;
@@ -19,7 +20,7 @@ import java.util.regex.Pattern;
  *
  * @author chrisgaubla
  */
-public class ICDMinerSentence extends ICDMiner{
+public class ICDMinerSentence extends ICDMiner {
 
     private DictionaryBuilder dicoBuilder = new DictionaryBuilder("Dictionary");
 
@@ -36,11 +37,11 @@ public class ICDMinerSentence extends ICDMiner{
         ArrayList<String> listSentence = splitter.getChunk(history);
 
         for (DicoEntry entry : dico) {
+            String foundSentenceList = "";
             boolean found = false;
             ArrayList<Pattern> listToken = entry.getTokenizedDescription();
             ArrayList<Pattern> listSynToken = entry.getSynonyms();
-            ArrayList<ArrayList<Matcher>> matchListList = new ArrayList<>();
-            ArrayList<ArrayList<Matcher>> matchSynListList = new ArrayList<>();
+            ArrayList<DicoEntrySentence> entrySenList = new ArrayList<>();
 
             for (String sentence : listSentence) {
                 ArrayList<Matcher> matchList = new ArrayList<>();
@@ -52,75 +53,85 @@ public class ICDMinerSentence extends ICDMiner{
                 for (Pattern pat : listSynToken) {
                     matchSynList.add(pat.matcher(sentence));
                 }
-                matchSynListList.add(matchSynList);
-                matchListList.add(matchList);
+                entrySenList.add(new DicoEntrySentence(sentence, entry, matchList, matchSynList));
 
             }
 
             switch (listToken.size()) {
                 case 1:
-                    for (ArrayList<Matcher> mList : matchListList) {
-                        for (Matcher m : mList) {
+                    for (DicoEntrySentence entrySentence : entrySenList) {
+                        for (Matcher m : entrySentence.getMatchList()) {
                             if (m.find()) {
                                 found = true;
-
+                                foundSentenceList = entrySentence.getSentence();
                                 break;
                             }
                         }
                     }
                 case 2:
-                    for (int i = 0; i <= listSentence.size() - WINDOW; i++) {
+                    for (int i = 0; i <= entrySenList.size() - WINDOW; i++) {
+                        String foundSentenceTemp = "";
                         int foundNum = 0;
-                        for (int k = 0; k < matchListList.get(0).size(); k++) {
+                        for (int k = 0; k < entrySenList.get(0).getMatchList().size(); k++) {
                             for (int j = i; j <= WINDOW; j++) {
-                                if (matchListList.get(j).get(k).find()) {
+                                if (entrySenList.get(j).getMatchList().get(k).find()) {
                                     foundNum++;
-
+                                    foundSentenceTemp = foundSentenceTemp + " ; " + entrySenList.get(j).getSentence();
+                                    if (foundNum == entrySenList.get(0).getMatchList().size()) {
+                                        found = true;
+                                        foundSentenceList = foundSentenceTemp;
+                                    }
                                     break;
                                 }
                             }
-                        }
-                        if (foundNum == matchListList.get(0).size()) {
-                            found = true;
-
-                            break;
                         }
                     }
                 case 3:
-                    for (int i = 0; i <= listSentence.size() - WINDOW; i++) {
+                    for (int i = 0; i <= entrySenList.size() - WINDOW; i++) {
+                        String foundSentenceTemp = "";
                         int foundNum = 0;
-                        for (int k = 0; k < matchListList.get(0).size(); k++) {
+                        for (int k = 0; k < entrySenList.get(0).getMatchList().size(); k++) {
                             for (int j = i; j <= WINDOW; j++) {
-                                if (matchListList.get(j).get(k).find()) {
+                                if (entrySenList.get(j).getMatchList().get(k).find()) {
                                     foundNum++;
+                                    foundSentenceTemp = foundSentenceTemp + entrySenList.get(j).getSentence()+" ; ";
+                                    if (foundNum == entrySenList.get(0).getMatchList().size()) {
+                                        found = true;
+                                        foundSentenceList = foundSentenceTemp;
+                                    }
                                     break;
                                 }
                             }
                         }
-                        if (foundNum == matchListList.get(0).size()) {
-                            found = true;
-                            break;
-                        }
                     }
                 default:
-                    Matcher matchDescription = entry.getDescriptionPattern().matcher(history);
-                    if (matchDescription.find()) {
-                        found = true;
+                    for (DicoEntrySentence enSen : entrySenList) {
+                        Matcher matchDescription = entry.getDescriptionPattern().matcher(enSen.getSentence());
+                        if(matchDescription.find()){
+                            found = true;
+                            foundSentenceList = enSen.getSentence();
+                        }
                     }
 
             }
-            for (ArrayList<Matcher> l : matchSynListList) {
-                for (Matcher m : l) {
-                    if (m.find()) {
-                        found = true;
+            
+            if(!found){
+                
+                for (DicoEntrySentence l : entrySenList) {
+                    for (Matcher m : l.getMatchSynList()) {
+                        if (m.find()) {
+                            found = true;
+                            foundSentenceList = l.getSentence();
+                        }
                     }
                 }
             }
             if (found) {
-                icdList.add(entry.getCode()+ " : "+entry.getDescription()+ "\n");
+                icdList.add("<em>"+entry.getCode() + " : </em> <strong>" + entry.getDescription() + " : </strong> "+ foundSentenceList+ "<br/>");
                 System.out.println("Found icd : " + entry.getCode() + " in history");
             }
         }
+        Collections.sort(icdList, String.CASE_INSENSITIVE_ORDER);
 
         return icdList;
     }

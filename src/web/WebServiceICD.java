@@ -8,12 +8,14 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import icdassignmentevaluator.ICDAssignmentEvaluator;
 import icdtextminer.ICDMinerBasic;
 import icdtextminer.ICDMinerSentence;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import org.json.JSONObject;
 
 public class WebServiceICD {
 
@@ -31,6 +33,7 @@ class MyHandler implements HttpHandler {
 
     static ICDMinerSentence senMiner = new ICDMinerSentence();
     static ICDMinerBasic basMiner = new ICDMinerBasic();
+    static ICDAssignmentEvaluator evaluator = new ICDAssignmentEvaluator();
 
     public void handle(HttpExchange exchange) throws IOException {
         String requestMethod = exchange.getRequestMethod();
@@ -48,12 +51,17 @@ class MyHandler implements HttpHandler {
 
             InputStream stream = exchange.getRequestBody();
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-            String history = "";
+            String content = "";
             String line = "";
             String response = "";
+            
             while ((line = reader.readLine()) != null) {
-                history = history + line;
+                content = content + line;
             }
+            JSONObject jsonContent = new JSONObject(content);
+            String history = jsonContent.getString("history");
+            String icdList = jsonContent.getString("icdList");
+            
             switch (exchange.getRequestURI().toString()) {
                 case "/findICDSentence":
                     System.out.println(history);
@@ -74,6 +82,12 @@ class MyHandler implements HttpHandler {
                         response = response + s;
                     }
                     break;
+                case "/evaluateICDList":
+                    response = "Scoring of ICD codes for this text: </br>";
+                    String[] scoreList = evaluator.evaluateList(history, icdList).replaceAll("\\[|\\]", "").split(",");
+                    for (String score : scoreList){
+                        response= response +"</br>"+score;
+                    }
 
             }
             responseBody.write(response.getBytes());
