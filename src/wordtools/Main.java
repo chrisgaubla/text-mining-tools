@@ -16,9 +16,10 @@ public class Main {
             
             PrintWriter out = null;
             try {
-                out = new PrintWriter("data/outputWordcountSynonyms2");
+                out = new PrintWriter("data/outputWordcountSynonyms");
                 ICDWordCount count = new ICDWordCount();
                 count.count("data/DictionaryFINAL2.csv",out );
+                
                 
 //            BracketCounter brac = new BracketCounter();
 //            brac.countBracketSyn("data/DictionaryFINAL2.csv");

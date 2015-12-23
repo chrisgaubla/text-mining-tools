@@ -21,8 +21,8 @@ public class CommonWordFilter {
 
     public CommonWordFilter() {
         commonWords = new TreeSet<>();
-        String[] commonWordsArray = {"of", "unspecified", "with", "and", "for", "or", "Other", "in", "other", "Unspecified", "to", "at", "by"};
-        commonWords.addAll(Arrays.asList(commonWordsArray));
+        String[] commonWordsArrayEN = {"of", "unspecified", "with", "and", "for", "or", "Other", "in", "other", "Unspecified", "to", "at", "by"};
+        commonWords.addAll(Arrays.asList(commonWordsArrayEN));
     }
 
     public ArrayList<String> getFilteredStringList(String input) {

@@ -13,7 +13,7 @@ import java.util.HashSet;
  * @author chrisgaubla
  */
 public class Dictionary {
-    private HashMap<String,DicoEntry> codeMap;
+    private HashMap<String,DicoEntry> codeMap = new HashMap<>();
 
     public Dictionary(HashSet<DicoEntry> dicoSet) {
         for(DicoEntry entry : dicoSet){

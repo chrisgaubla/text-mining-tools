@@ -53,18 +53,6 @@ public class ICDWordCount {
             
             
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ICDWordCount.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

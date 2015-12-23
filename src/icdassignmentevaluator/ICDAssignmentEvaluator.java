@@ -77,32 +77,34 @@ public class ICDAssignmentEvaluator {
                 for (DicoEntrySentence entrySentence : entrySenList) {
                     for (Matcher m : entrySentence.getMatchList()) {
                         if (m.find()) {
-                            score = 1;
+                            score = Math.max(score, 1);
                             break;
                         }
                     }
                 }
+                break;
             case 2:
-                for (int i = 0; i <= entrySenList.size() - WINDOW; i++) {
+                for (int i = 0; i <= Math.max(entrySenList.size() - WINDOW,0); i++) {
                     String foundSentenceTemp = "";
                     int foundNum = 0;
                     for (int k = 0; k < entrySenList.get(0).getMatchList().size(); k++) {
-                        for (int j = i; j <= WINDOW; j++) {
+                        for (int j = i; j < Math.min(WINDOW,entrySenList.size()); j++) { 
                             if (entrySenList.get(j).getMatchList().get(k).find()) {
                                 foundNum++;
                                 foundSentenceTemp = foundSentenceTemp + " ; " + entrySenList.get(j).getSentence();
                                 score = Math.max(score, foundNum/2);
-                                break;
+                                
                             }
                         }
                     }
                 }
+                break;
             case 3:
-                for (int i = 0; i <= entrySenList.size() - WINDOW; i++) {
+                for (int i = 0; i <= Math.max(entrySenList.size() - WINDOW, 0); i++) {
                     String foundSentenceTemp = "";
                     int foundNum = 0;
                     for (int k = 0; k < entrySenList.get(0).getMatchList().size(); k++) {
-                        for (int j = i; j <= WINDOW; j++) {
+                        for (int j = i; j < Math.min(WINDOW, entrySenList.size()); j++) {
                             if (entrySenList.get(j).getMatchList().get(k).find()) {
                                 foundNum++;
                                 foundSentenceTemp = foundSentenceTemp + entrySenList.get(j).getSentence() + " ; ";
@@ -112,6 +114,7 @@ public class ICDAssignmentEvaluator {
                         }
                     }
                 }
+                break;
             default:
                 for (DicoEntrySentence enSen : entrySenList) {
                     Matcher matchDescription = entry.getDescriptionPattern().matcher(enSen.getSentence());

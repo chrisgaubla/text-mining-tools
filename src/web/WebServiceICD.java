@@ -37,7 +37,6 @@ class MyHandler implements HttpHandler {
 
     public void handle(HttpExchange exchange) throws IOException {
         String requestMethod = exchange.getRequestMethod();
-        System.out.println("coucou");
 
         if (requestMethod.equalsIgnoreCase("POST")) {
 
@@ -60,8 +59,7 @@ class MyHandler implements HttpHandler {
             }
             JSONObject jsonContent = new JSONObject(content);
             String history = jsonContent.getString("history");
-            String icdList = jsonContent.getString("icdList");
-            
+            String icdList = (jsonContent.isNull("icdList")? "":jsonContent.getString("icdList"));
             switch (exchange.getRequestURI().toString()) {
                 case "/findICDSentence":
                     System.out.println(history);
@@ -85,9 +83,11 @@ class MyHandler implements HttpHandler {
                 case "/evaluateICDList":
                     response = "Scoring of ICD codes for this text: </br>";
                     String[] scoreList = evaluator.evaluateList(history, icdList).replaceAll("\\[|\\]", "").split(",");
+                    System.out.println(scoreList);
                     for (String score : scoreList){
                         response= response +"</br>"+score;
                     }
+                    break;
 
             }
             responseBody.write(response.getBytes());
