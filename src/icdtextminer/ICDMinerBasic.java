@@ -21,8 +21,8 @@ public class ICDMinerBasic extends ICDMiner {
     private HashSet<DicoEntry> dico = dicoBuilder.getDictionaryString();
 
     @Override
-    public ArrayList<String> getMatching(String history) {
-        ArrayList<String> icdList = new ArrayList<>();
+    public ArrayList<MatchedCode> getMatching(String history) {
+        ArrayList<MatchedCode> icdList = new ArrayList<>();
         for (DicoEntry entry : dico) {
             boolean found = false;
 
@@ -39,12 +39,10 @@ public class ICDMinerBasic extends ICDMiner {
                 }
             }
             if (found) {
-                icdList.add(entry.getCode() + " : " + entry.getDescription()+"<br/>");
-                
+                icdList.add(new MatchedCode(entry, history, entry.getCode() + " : " + entry.getDescription()+"<br/>"));
             }
             
         }
-        Collections.sort(icdList, String.CASE_INSENSITIVE_ORDER);
         return icdList;
     }
 }

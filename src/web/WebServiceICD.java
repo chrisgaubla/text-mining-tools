@@ -11,6 +11,7 @@ import com.sun.net.httpserver.HttpServer;
 import icdassignmentevaluator.ICDAssignmentEvaluator;
 import icdtextminer.ICDMinerBasic;
 import icdtextminer.ICDMinerSentence;
+import icdtextminer.MatchedCode;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -64,20 +65,20 @@ class MyHandler implements HttpHandler {
                 case "/findICDSentence":
                     System.out.println(history);
 
-                    ArrayList<String> senList = senMiner.getMatching(history);
+                    ArrayList<MatchedCode> senList = senMiner.getMatching(history);
                     System.out.println("Response : " + senList.toString());
-                    for (String s : senList){
-                        response = response + s;
+                    for (MatchedCode m : senList){
+                        response = response + m.getWebString();
                     }
                     break;
                 case "/findICDBasic":
 
                     System.out.println(history);
 
-                    ArrayList<String> basList = basMiner.getMatching(history);
+                    ArrayList<MatchedCode> basList = basMiner.getMatching(history);
                     System.out.println("Response : " + basList.toString());
-                    for (String s : basList){
-                        response = response + s;
+                    for (MatchedCode m : basList){
+                        response = response + m.getWebString();
                     }
                     break;
                 case "/evaluateICDList":

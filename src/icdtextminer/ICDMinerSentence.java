@@ -28,11 +28,12 @@ public class ICDMinerSentence extends ICDMiner {
     private final SentenceModel SENTENCE_MODEL = new MedlineSentenceModel();
     SentenceSplitter splitter = new SentenceSplitter();
     private final int WINDOW = 3;
+    
 
     @Override
-    public ArrayList<String> getMatching(String history) {
+    public ArrayList<MatchedCode> getMatching(String history) {
 
-        ArrayList<String> icdList = new ArrayList<>();
+        ArrayList<MatchedCode> icdList = new ArrayList<>();
         ArrayList<String> listSentence = splitter.getChunk(history);
 
         for (DicoEntry entry : dico) {
@@ -126,11 +127,10 @@ public class ICDMinerSentence extends ICDMiner {
                 }
             }
             if (found) {
-                icdList.add("<em>"+entry.getCode() + " : </em> <strong>" + entry.getDescription() + " : </strong> "+ foundSentenceList+ "<br/>");
+                icdList.add(new MatchedCode(entry, history, "<em>"+entry.getCode() + " : </em> <strong>" + entry.getDescription() + " : </strong> "+ foundSentenceList+ "<br/>"));
                 System.out.println("Found icd : " + entry.getCode() + " in history");
             }
         }
-        Collections.sort(icdList, String.CASE_INSENSITIVE_ORDER);
 
         return icdList;
     }

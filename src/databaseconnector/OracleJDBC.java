@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 public class OracleJDBC {
 
-    public static void main(String[] argv) {
+    public static void main(String[] args) {
 
         System.out.println("-------- Oracle JDBC Connection Testing ------");
 

@@ -16,5 +16,5 @@ public abstract class ICDMiner {
     private DictionaryBuilder dicoBuilder;
     private HashSet<DicoEntry> dico;
     
-    public abstract ArrayList<String> getMatching(String history);
+    abstract ArrayList<MatchedCode> getMatching(String history);
 }
